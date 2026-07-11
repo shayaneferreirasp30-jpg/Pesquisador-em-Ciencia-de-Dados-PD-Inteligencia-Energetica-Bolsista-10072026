@@ -14,12 +14,13 @@ A Digital Grid automatiza e otimiza esse processo usando inteligência preditiva
 
 ## Recursos Fornecidos
 
-Dois arquivos, na raiz deste repositório. O histórico vai de **julho/2023 a
-junho/2026** (36 meses).
+Dois arquivos, na raiz deste repositório.
 
-**`consumer_unit_data.xlsx`** — Histórico de consumo e saldo acumulado de créditos de várias UCs que estão atreladas a uma Usina.
+**`consumer_unit_data.xlsx`** — Histórico de consumo e saldo acumulado de créditos de várias UCs que estão atreladas a uma Usina. Vai de **julho/2023 a junho/2026** (36 meses).
 
-**`power_plant_data.xlsx`** — Histórico de geração de uma Usina Teste que é a usina em questão.
+**`power_plant_data.xlsx`** — Histórico de geração de uma Usina Teste que é a usina em questão. Vai de **julho/2022 a junho/2026** (48 meses) — repare que a janela **não** é a mesma da base de consumo.
+
+Os dados são derivados de uma carteira real, anonimizados — **com os defeitos que dados de produção têm**. Não fizemos limpeza para você.
 
 ---
 
@@ -66,7 +67,12 @@ Implemente a lógica de alocação de créditos:
 Sua função deve **receber o mês como parâmetro** e funcionar para qualquer mês do
 histórico — não apenas o de referência.
 
-**Valide** que `Σ P = 1`.
+O rateio é feito sobre o **consumo faturado** do mês: use os valores como eles estão na
+base. Se você decidir corrigir ou imputar algum valor, essa correção vale para a
+modelagem (Q3), não para o rateio.
+
+**Valide** que `Σ P = 1` — e pergunte-se se essa validação prova mesmo que o seu rateio
+está correto.
 
 **Responda no notebook:** o que acontece matematicamente com `P` se `Σ Co = 0`, ou
 seja, se nenhuma UC precisar de crédito naquele mês? Como você trataria isso em
@@ -110,18 +116,23 @@ histórico.
 A Digital Grid tem um sistema chamado **REBALANCE**, que redistribui energia para
 evitar vacância e overbooking. Simule uma versão simplificada.
 
-**Cenário:** a usina fechou o mês de referência com **10.000 kWh excedentes**, acima
-da soma das coberturas `Co` calculadas na Q1.
+**Cenário:** a carteira tem crédito preso em UCs que não vão usá-lo. O REBALANCE
+recupera esse crédito e o devolve a quem precisa.
 
-Escreva uma função que distribua esse excedente entre as UCs. Requisitos:
+1. **Calcule o excedente.** A partir dos seus dados limpos, apure quanto crédito está
+   parado hoje em UCs que não consomem mais. Esse é o montante a redistribuir — não
+   damos o número; ele sai da sua Q0.
+2. **Redistribua entre as UCs ativas.** Escreva uma função que faça a alocação.
+   - **Não distribua igualmente.** Priorize quem traz mais segurança ao negócio, e
+     explique o critério. Se a Q3 ficou pronta, use a previsão; se não, use o histórico.
+   - **Restrição obrigatória:** nenhuma UC pode **terminar** com saldo acima de **1 mês**
+     do seu consumo médio dos últimos 12 meses. Crédito parado é crédito desperdiçado —
+     é justamente o problema que estamos consertando.
+   - UCs que **já** estão acima desse teto não recebem nada.
+3. **Demonstre** em um DataFrame o saldo de cada UC antes e depois.
 
-- **Não distribua igualmente.** Priorize as UCs que trazem mais segurança ao negócio,
-  e explique o critério.
-- **Restrição obrigatória:** nenhuma UC pode terminar com saldo acima de **3 meses**
-  do seu consumo médio. Crédito parado é crédito desperdiçado.
-- Se a Q3 ficou pronta, use a previsão para decidir. Se não, use o histórico.
-
-**Demonstre** em um DataFrame como ficou o saldo de cada UC antes e depois da injeção.
+**Responda:** sobrou crédito que não coube em ninguém? Quanto? O que a Digital Grid
+deveria fazer com ele?
 
 ---
 
