@@ -1,3 +1,13 @@
+# Vídeo de apresentação
+
+https://youtu.be/skffzu66xQ4
+
+---
+
+# DESAFIO TÉCNICO
+
+(a partir daqui permanece todo o README original)
+
 # Desafio Técnico de Data Science — Digital Grid
 
 Vaga: Pesquisador em Ciência de Dados — P&D Inteligência Energética (Bolsista)
