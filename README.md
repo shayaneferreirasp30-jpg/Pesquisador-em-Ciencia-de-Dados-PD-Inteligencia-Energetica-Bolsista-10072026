@@ -2,6 +2,7 @@
 
 **Vaga:** Pesquisador em Ciência de Dados — P&D Inteligência Energética (Bolsista)
 
+
 **Duração máxima:** 3 horas
 ---
 
